@@ -1,0 +1,88 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { homeContent } from "../lib/api";
+
+interface Main {
+	node: {
+		link: string;
+	};
+}
+
+const data = await homeContent();
+const mainGroup: Main[] = Object.values(data.page.mainGroup);
+// console.log(mainGroup);
+---
+
+<script>
+	import Swiper from "swiper";
+	import { Pagination, Autoplay, EffectFade } from "swiper/modules";
+	import "swiper/css";
+	import "swiper/css/autoplay";
+	import "swiper/css/pagination";
+	import "swiper/css/effect-fade";
+	document.addEventListener("astro:page-load", () => {
+		const swiper = new Swiper(".mySwiper", {
+			speed: 3000,
+			autoplay: {
+				delay: 2000,
+			},
+			effect: "fade",
+			fadeEffect: {
+				crossFade: true,
+			},
+			pagination: {
+				el: ".swiper-pagination",
+			},
+			modules: [Autoplay, Pagination, EffectFade],
+		});
+	});
+</script>
+
+<Layout title="Main Page">
+	<div class="swiper mySwiper">
+		<div class="swiper-wrapper">
+			{
+				mainGroup.map((swiperImage) => (
+					<div class="swiper-slide">
+						<img src={swiperImage.node.link} alt="" />
+					</div>
+				))
+			}
+		</div>
+		<div class="swiper-pagination"></div>
+	</div>
+</Layout>
+
+<style lang="scss">
+	// SLIDER
+	.swiper {
+		box-sizing: border-box;
+		height: calc(100vh - 144px);
+		z-index: -1;
+		width: 100%;
+
+		&-slide {
+			text-align: center;
+			font-size: 18px;
+			background: #fff;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			img {
+				display: block;
+				width: 100%;
+				height: 100%;
+
+				object-fit: contain;
+			}
+		}
+	}
+
+
+	@media (max-width: 460px) {
+		.swiper {
+			height: calc(100vh - 173px);
+		}
+	}
+</style>

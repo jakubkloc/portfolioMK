@@ -1,0 +1,79 @@
+---
+import { bioContent } from "../lib/api";
+const data = await bioContent();
+const c = data.page.bioGroup;
+---
+
+<footer>
+  <div class="row">
+    <div class="signature">
+      <p>{import.meta.env.PUBLIC_FIRSTNAME_AND_LASTNAME}</p>
+    </div>
+    <div>
+      <a href={`mailto:${c.gmail}`}>GMAIL</a>
+      <a href={c.instagram} class="instagram">INSTAGRAM</a>
+    </div>
+    <div class="attribution">
+      <p>
+        <a href="jakubkloc.github.to" target="_blank">Code by Jakub Kloc</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  footer {
+    background-color: black;
+    box-sizing: border-box;
+
+    width: 100%;
+
+    padding-inline: 5%;
+    padding-block: 20px;
+    margin-top: auto;
+  }
+  p {
+    color: white;
+  }
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
+
+  .row {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 1rem;
+  }
+  .signature {
+    font-size: 1.5rem;
+    margin-right: 5rem;
+  }
+  .instagram {
+    margin-left: 2rem;
+  }
+  .attribution {
+    margin-left: auto;
+  }
+
+  @media (max-width: 960px) {
+    .row {
+      justify-content: space-between;
+    }
+    .signature {
+      margin-right: 0;
+    }
+    .attribution {
+      display: none;
+    }
+  }
+  @media (max-width: 460px) {
+    .row {
+      flex-direction: column;
+      letter-spacing: 0.2rem;
+    }
+  }
+</style>

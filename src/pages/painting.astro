@@ -1,0 +1,42 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { paintingContent } from "../lib/api";
+import ImageCard from "../components/image-card.astro";
+
+interface Paintings {
+  title: string;
+  year: number;
+  method_dimensions: string;
+  painting: {
+    node: {
+      link: string;
+      mediaDetails: {
+        height: string;
+        width: string;
+      };
+    };
+  };
+}
+
+const data = await paintingContent();
+const paintingsGroup: Paintings[] = Object.values(data.page.paintingsGroup);
+---
+
+<Layout title="Painting">
+  {
+    paintingsGroup.map(
+      (painting, index) =>
+        painting.title !== null && (
+          <ImageCard
+            key={index}
+            name={painting.title}
+            year={painting.year}
+            manufacture={painting.method_dimensions}
+            photos={[painting.painting.node.link]}
+            photoWidth={[painting.painting.node.mediaDetails.width]}
+            photoHeight={[painting.painting.node.mediaDetails.height]}
+          />
+        ),
+    )
+  }
+</Layout>

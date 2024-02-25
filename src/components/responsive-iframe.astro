@@ -1,0 +1,24 @@
+---
+import YouTubeIframeTemplate from "../lib/YouTubeIframeTemplate";
+const { iframeLink } = Astro.props;
+const iframe = YouTubeIframeTemplate(iframeLink);
+---
+
+<div class="iframe-wrapper">
+  <div class="iframe" set:html={iframe} />
+</div>
+
+<style>
+  div.iframe-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 100px 0 0;
+    div.iframe {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding-top: 56.25%;
+      margin-top: 10%;
+    }
+  }
+</style>

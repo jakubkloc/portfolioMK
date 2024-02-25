@@ -1,0 +1,43 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { mixmediaContentCollages } from "../lib/api";
+import ImageCard from "../components/image-card.astro";
+
+interface Collages {
+  title: string;
+  year: number;
+  dimensions: string;
+  collage: {
+    node: {
+      link: string;
+      mediaDetails: {
+        width: string;
+        height: string;
+      };
+    };
+  };
+}
+
+const data = await mixmediaContentCollages();
+const collages: Collages[] = Object.values(data.page.mixmediaGroup.collages);
+---
+
+<Layout title="Mixmedia Collages">
+  {
+    collages.map(
+      (collage, index) =>
+        collage.title && (
+          <ImageCard
+            key={index}
+            name={collage.title}
+            year={collage.year}
+            manufacture={collage.dimensions}
+            photos={[collage.collage.node.link]}
+            photoWidth={[collage.collage.node.mediaDetails.width]}
+            photoHeight={[collage.collage.node.mediaDetails.height]}
+          />
+        ),
+    )
+  }
+</Layout>
+

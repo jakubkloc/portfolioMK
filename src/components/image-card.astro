@@ -1,0 +1,98 @@
+---
+import checkUnsafeHTML from "../lib/checkUnsafeHTML";
+const {
+  name,
+  year,
+  manufacture,
+  photos,
+  html,
+  isVideo,
+  videoSrc,
+  photoWidth,
+  photoHeight,
+} = Astro.props;
+---
+
+<div class="container">
+  <div class="column-description">
+    <hr />
+    {html && <div set:html={checkUnsafeHTML(html)} />}
+    <h2>{name}</h2>
+    <p>{year}</p>
+    <p>{manufacture}</p>
+  </div>
+  <div class="column-galery">
+    {
+      isVideo
+        ? videoSrc != null && (
+            <>
+              <video width="400" controls>
+                <source src={videoSrc} type="video/mp4" />
+              </video>
+            </>
+          )
+        : photos.map((photo, index: number) => {
+            if (photo === null) {
+              return;
+            }
+            return (
+              <img
+                src={photo}
+                width={photoWidth[index]}
+                height={photoHeight[index]}
+              />
+            );
+          })
+    }
+  </div>
+
+  <style lang="scss">
+    .container {
+      padding-bottom: 50px;
+      border-bottom: 1px solid black;
+      display: flex;
+      width: 100%;
+      max-width: 1600px;
+      margin: auto;
+      padding-top: 30px;
+      margin-bottom: 30px;
+      .column-description {
+        padding-inline: 25px;
+        width: 30%;
+      }
+      .column-galery {
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        row-gap: 5rem;
+        align-items: flex-start;
+        video {
+          width: 90%;
+          height: auto;
+        }
+        img {
+          height: auto;
+          max-width: calc(min(90%, 1600px));
+          max-height: 86vh;
+          object-fit: contain;
+        }
+      }
+    }
+    @media (max-width: 956px) {
+      .container {
+        border: none;
+        flex-wrap: wrap;
+        .column-description {
+          width: 100%;
+          margin-bottom: 30px;
+        }
+
+        .column-galery {
+          width: 100%;
+          align-items: center;
+          padding-inline: 8%;
+        }
+      }
+    }
+  </style>
+</div>

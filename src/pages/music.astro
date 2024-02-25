@@ -1,0 +1,84 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { musicContent } from "../lib/api";
+import checkUnsafeHTML from "../lib/checkUnsafeHTML";
+import deleteHTMLTags from "../lib/deleteHTMLTags";
+import ResponsiveIframe from "../components/responsive-iframe.astro";
+const data = await musicContent();
+const c = data.page.musicGroup;
+c.photo.node.caption = deleteHTMLTags(c.photo.node.caption);
+c.text_content = checkUnsafeHTML(c.text_content);
+
+const musicLinksArray = Object.keys(c)
+  .filter((key) => key.startsWith("music_link"))
+  .map((key) => c[key])
+  .filter((value) => value !== null);
+---
+
+<Layout title="Music">
+  <div class="container">
+    <div class="column">
+      <div class="image-wraper">
+        <img
+          class="photo"
+          width={c.photo.node.mediaDetails.width}
+          height={c.photo.node.mediaDetails.height}
+          src={c.photo.node.link}
+          alt="music photo"
+        />
+        <p>{c.photo.node.caption}</p>
+      </div>
+
+      <a class="link" href={c.band_link}>
+        <div set:html={c.text_content} />
+      </a>
+    </div>
+    {
+      musicLinksArray.map((musicLink, index) => (
+        <ResponsiveIframe key={index} iframeLink={musicLink} />
+      ))
+    }
+    <div class="chunk"></div>
+
+    <style lang="scss">
+      .container {
+        max-width: 1600px;
+        margin-inline: auto;
+
+        .column {
+          padding: 10px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .image-wraper {
+            text-align: right;
+            max-width: min(100%, 800px);
+            min-width: 320px;
+            margin-inline: auto;
+            margin-bottom: 50px;
+            width: 90%;
+            .photo {
+              height: auto;
+              max-width: 100%;
+              object-fit: contain;
+            }
+          }
+          .link {
+            text-decoration: none;
+            color: black;
+            width: 90%;
+            display: flex;
+            justify-content: center;
+          }
+          .link:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+      .chunk {
+        width: 100%;
+        height: 100px;
+      }
+    </style>
+  </div>
+</Layout>

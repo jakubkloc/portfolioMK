@@ -1,0 +1,104 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import { bioContent } from "../lib/api";
+import getInstagramUsername from "../lib/getInstagramUsername.js";
+const data = await bioContent();
+const c = data.page.bioGroup;
+---
+
+<Layout title="Bio">
+  <div class="container">
+    <div class="column1">
+      <div class="wrapper">
+        <Image
+          class="photo"
+          src={c.photo.node.link}
+          alt="bio photo"
+          width="480"
+          height="610"
+        />
+        <div class="links">
+          <a href={`mailto:${c.gmail}`} class="link">{c.gmail}</a>
+          <a href={c.instagram} class="link"
+            >ig:@{getInstagramUsername(c.instagram)}</a
+          >
+        </div>
+      </div>
+    </div>
+    <div class="column2">
+      <p class="text">{c.textbio}</p>
+      <h2 class="title">{c.text_title1}</h2>
+      <pre class="text">{c.text_content1}</pre>
+      <h2 class="title">{c.text_title2}</h2>
+      <pre class="text">{c.text_content2}</pre>
+      <h2 class="title">{c.text_title3}</h2>
+      <pre class="text">{c.text_content3}</pre>
+      <h2 class="title">{c.text_title4}</h2>
+      <pre class="text">{c.text_content4}</pre>
+    </div>
+  </div>
+  <style lang="scss">
+    $mobile-desktop-breakpoint: 1160px;
+    .container {
+      display: flex;
+      padding: 50px;
+      .column1 {
+        width: 50%;
+
+        .wrapper {
+          width: min-content;
+        }
+        .photo {
+          margin-bottom: 25px;
+          margin-top: 16px;
+        }
+        .link {
+          color: black;
+          text-decoration: none;
+        }
+        .link:hover {
+          text-decoration: underline;
+        }
+
+        .links {
+          display: flex;
+          width: 100%;
+          justify-content: space-evenly;
+          flex-wrap: wrap;
+        }
+      }
+      .column2 {
+        width: 50%;
+        .title {
+          font-size: 18px;
+        }
+        .text {
+          margin-bottom: 50px;
+          font-family: system-ui, sans-serif;
+          overflow-wrap: break-word;
+          white-space: pre-wrap;
+        }
+      }
+    }
+    @media screen and (max-width: $mobile-desktop-breakpoint) {
+      .container {
+        padding: 5%;
+        flex-direction: column;
+        .column1,
+        .column2 {
+          width: 100%;
+        }
+        .column1 {
+          .wrapper {
+            width: unset;
+          }
+          .photo {
+            width: 100%;
+            height: auto;
+          }
+        }
+      }
+    }
+  </style>
+</Layout>

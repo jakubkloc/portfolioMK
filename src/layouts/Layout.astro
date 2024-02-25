@@ -1,0 +1,43 @@
+---
+import { ViewTransitions } from "astro:transitions";
+import Navbar from "../components/navbar.astro";
+import Footer from "../components/footer.astro";
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<ViewTransitions />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+	</head>
+
+	<body>
+		<Navbar />
+		<main>
+			<slot />
+		</main>
+		<Footer />
+		<style is:global lang="scss">
+			p {
+				margin: 0;
+			}
+			body {
+				margin: 0;
+				// reserving space for the navigation bar
+				margin-top: 72px;
+			}
+			html {
+				font-family: system-ui, sans-serif;
+			}
+		</style>
+	</body>
+</html>

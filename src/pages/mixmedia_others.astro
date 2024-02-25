@@ -1,0 +1,71 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { mixmediaContentOthers } from "../lib/api";
+import ImageCard from "../components/image-card.astro";
+import checkUnsafeHTML from "../lib/checkUnsafeHTML";
+interface Others {
+  text: string;
+  video_link?: string;
+  photo1?: {
+    node: {
+      link: string;
+      mediaDetails: {
+        width: string;
+        height: string;
+      };
+    };
+  };
+  photo2?: {
+    node: {
+      link: string;
+      mediaDetails: {
+        width: string;
+        height: string;
+      };
+    };
+  };
+  photo3?: {
+    node: {
+      link: string;
+      mediaDetails: {
+        width: string;
+        height: string;
+      };
+    };
+  };
+}
+
+const data = await mixmediaContentOthers();
+const others: Others[] = Object.values(data.page.mixmediaGroup.others);
+---
+
+<Layout title="Mixmedia Collages">
+  {
+    others.map(
+      (other) =>
+        other.text !== null &&
+        (other.video_link ? (
+          <ImageCard isVideo html={other.text} videoSrc={other.video_link} />
+        ) : (
+          <ImageCard
+            html={other.text}
+            photos={[
+              other.photo1?.node.link ?? null,
+              other.photo2?.node.link ?? null,
+              other.photo3?.node.link ?? null,
+            ]}
+            photoWidth={[
+              other.photo1?.node.mediaDetails.width ?? null,
+              other.photo2?.node.mediaDetails.width ?? null,
+              other.photo3?.node.mediaDetails.width ?? null,
+            ]}
+            photoHeight={[
+              other.photo1?.node.mediaDetails.height ?? null,
+              other.photo2?.node.mediaDetails.height ?? null,
+              other.photo3?.node.mediaDetails.height ?? null,
+            ]}
+          />
+        )),
+    )
+  }
+</Layout>

@@ -1,0 +1,72 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { sculptureContent } from "../lib/api";
+import ImageCard from "../components/image-card.astro";
+
+interface Sculpture {
+  name: string;
+  year: number;
+  making_method: string;
+  photo1?: {
+    node: {
+      link: string;
+      mediaDetails: {
+        width: string;
+        height: string;
+      };
+    };
+  };
+  photo2?: {
+    node: {
+      link: string;
+      mediaDetails: {
+        width: string;
+        height: string;
+      };
+    };
+  };
+  photo3?: {
+    node: {
+      link: string;
+      mediaDetails: {
+        width: string;
+        height: string;
+      };
+    };
+  };
+}
+const data = await sculptureContent();
+const sculpturesGroup: Sculpture[] = Object.values(data.page.sculpturesGroup);
+console.log(sculpturesGroup);
+---
+
+<Layout title="Sculpture">
+  {
+    sculpturesGroup.map(
+      (sculpture, index) =>
+        sculpture.name !== null && (
+          <ImageCard
+            key={index}
+            name={sculpture.name}
+            year={sculpture.year}
+            manufacture={sculpture.making_method}
+            photos={[
+              sculpture.photo1?.node.link ?? null,
+              sculpture.photo2?.node.link ?? null,
+              sculpture.photo3?.node.link ?? null,
+            ]}
+            photoWidth={[
+              sculpture.photo1?.node.mediaDetails.width ?? null,
+              sculpture.photo2?.node.mediaDetails.width ?? null,
+              sculpture.photo3?.node.mediaDetails.width ?? null,
+            ]}
+            photoHeight={[
+              sculpture.photo1?.node.mediaDetails.height ?? null,
+              sculpture.photo2?.node.mediaDetails.height ?? null,
+              sculpture.photo3?.node.mediaDetails.height ?? null,
+            ]}
+          />
+        ),
+    )
+  }
+</Layout>
